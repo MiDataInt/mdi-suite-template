@@ -1,3 +1,7 @@
+---
+published: false # set to false to remove this tab from your suite's doc site
+---
+
 ## Job file templates
 
 The `templates` folder carries YAML job file templates

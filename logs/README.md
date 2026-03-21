@@ -1,3 +1,7 @@
+---
+published: false # set to false to remove this tab from your suite's doc site
+---
+
 ## Job log reports
 
 The `logs` folder carries text files containing the output

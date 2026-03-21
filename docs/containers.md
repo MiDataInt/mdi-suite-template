@@ -1,5 +1,5 @@
 ---
-title: Singularity Containers/Apptainers
+title: Singularity Containers
 has_children: false
 nav_order: 50
 published: true # set to false to remove this tab from your suite's doc site

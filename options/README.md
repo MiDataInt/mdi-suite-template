@@ -1,3 +1,7 @@
+---
+published: false # set to false to remove this tab from your suite's doc site
+---
+
 ## Pipeline action option summaries
 
 The `options` folder carries the `--help` output
