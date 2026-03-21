@@ -1,0 +1,46 @@
+# MDI GitHub Continuous Integration Action to compile 
+# a Rust binary and attach it as a versioned release asset
+
+name: compile Rust
+on:
+  # trigger the action on any level of tag release (e.g., v1.2.3)
+  push:
+    tags: [ 'v[0-9]+.*' ] # MDI repos expect v.#.#.# as semantic versions
+
+permissions:
+  contents: read
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    env:
+      BINARY_NAME: __TOOL_SUITE_NAME__ # change this line to compile shared/crates/<BINARY_NAME>
+                                       # the parent MDI repository must hold this file in .github/workflows
+    steps:
+      # checkout this tool suite
+      - uses: actions/checkout@v6
+
+      - name: Install C support # required by rust-htslib
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libssl-dev libbz2-dev liblzma-dev zlib1g-dev
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Install zig # for cross-compilation on an older GLIBC for distribution
+        run: |
+          sudo snap install zig --classic --edge
+          cargo install cargo-zigbuild
+
+      - name: Build and release binary
+        uses: taiki-e/upload-rust-binary-action@v1
+        env:
+          RUSTFLAGS: "-C target-cpu=x86-64-v3" # AVX2/SIMD support with wide HPC compatibility
+        with:
+          bin:           ${{ env.BINARY_NAME }}
+          manifest-path: shared/crates/${{ env.BINARY_NAME }}/Cargo.toml
+          target:        x86_64-unknown-linux-gnu.2.28 # use glibc 2.28 for wide Linux distro support >= year 2019
+          token:         ${{ secrets.GITHUB_TOKEN }}
+          build-tool:    cargo-zigbuild

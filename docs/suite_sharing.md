@@ -72,7 +72,7 @@ gitCredentials <- list(
     GITHUB_PAT = "xxx"
 )
 ```
-
+<!-- 
 ### Add your public tools to the MDI suite registry
 
 For maximum visibility within the MDI, you may list your tool suite
@@ -96,4 +96,5 @@ to ensure that your suite appears appropriate, identifiable, and not nefarious.
 We will then either accept your pull request or reply with needed changes.
 
 > **IMPORTANT** - the MDI team never takes responsibility for your code. You are
-> responsible for all outcomes and queries related to the use of your tool suite by any user.
+> responsible for all outcomes and queries related to the use of your tool suite by any user. 
+-->

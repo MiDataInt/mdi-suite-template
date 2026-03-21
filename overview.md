@@ -9,7 +9,6 @@ nav_order: 0
 <!-- please do not alter the next line -->
 {% include mdi-project-overview.md %}
 
-
 <!-- replace this section with markdown content describing your tool suite -->
 <!-- https://www.markdownguide.org/basic-syntax/ -->
 
@@ -23,17 +22,16 @@ which you can use to create your own suite of Stage 1 Pipelines and Stage 2 Apps
 [**Click here**](https://github.com/MiDataInt/mdi-suite-template/generate) 
 to create a new tool suite repository from the template.
 
->We recommend **NAME-mdi-tools** as the name of your 
-repository, replacing 'NAME' with an informative name of your choosing, 
-e.g., 'johndoelab'.
+You will be prompted for the user and name of the repository you would like 
+to create.
 
 Open and edit the following files, using the instructions in comments
 to find lines to edit to match your needs:
 
 - _config.yml
 - overview.md
-- LICENSE (adjust the type, year, and licensee)
-- README.md (delete the developer instructions, if desired)
+- LICENSE
+- README.md
 
 Then copy and modify the '_template' pipeline or app, which provides a working 
 boilerplate for all required code. 

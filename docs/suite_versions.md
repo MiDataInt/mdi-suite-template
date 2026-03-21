@@ -16,17 +16,21 @@ The MDI uses the semantic versioning pattern, 'v0.0.0', described here:
 
 - <https://semver.org/>
 
-Only you can decide how to implement a versioning scheme
-for your tool suite, but here are some guidelines:
+In general, you should:
 
 - advance the patch (3rd) version number for bug fixes and small feature additions
 - advance the minor (2nd) version number whenever:
     - new program dependencies are introduced, e.g., via conda
     - new pipelines, apps, or other major code features are introduced
 - advance the major (1st) version whenever breaking changes are introduced that
-would prevent job files written for previous versions from working with the current version
+  would prevent job files written for previous versions from working with the current version
 
-Please note that Git version/release tags apply to the entire tool suite,
+Thus, the MDI convention is that:
+- patch version changes never require a new program dependency
+- changes to the required working environment of your code are reflected in a change to the major or minor version
+- breaking changes are always reflected in a major version change
+
+Importantly, Git version/release tags apply to the entire tool suite,
 not to individual pipelines or apps. Thus, you 
 should advance the tool suite version whenever a matching code change
 occurs in any of the tools carried in the suite repository. 

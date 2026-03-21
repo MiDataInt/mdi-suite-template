@@ -59,3 +59,16 @@ menu items typical of MDI documentation sites.
 Examples here will get you going:
 
 <https://github.com/MiDataInt/mdi-documentation-template/tree/main/_docs>
+
+### Additional folders for helping users with options and templates
+
+Sometimes users just want to see the list of all available options.
+The `options` folder in your tool suite can be populated using the
+script in that folder with markdown summaries easily viewed on GitHub.
+
+Other times, an example is worth 1,000 documentation words. The
+`templates` and `logs` folders can be similarly populated with 
+job file templates and the output of those or other job files
+for users to compare to their own work.
+
+See the folder contents for additional information.
