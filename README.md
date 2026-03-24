@@ -48,8 +48,10 @@ to match your tool suite.
 
 Most tool suites are recommended to use a single-suite intallation.
 If a multi-suite installation is better for your application, or not 
-recommended at all, move and/or delete the different installation 
-sections as needed.
+recommended at all, modify the different installation sections as needed.
+
+Instructions below are also written assuming you will support containers.
+Modify those sections below if you only support local conda environments.
 
 # __TOOL_SUITE_NAME__ Tool Suite
 
@@ -58,7 +60,7 @@ DOING SOMETHING INTERESTING.
 
 The steps to using __TOOL_SUITE_NAME__ are to:
 - install the codebase in this repository
-- build the conda environment (if not using Singularity/Apptainer)
+- build the conda runtime environment, or use Singularity containers/Apptainer
 - MORE STEPS HERE
 - visualize results in the R Shiny apps
 
@@ -113,17 +115,34 @@ cd __TOOL_SUITE_NAME__
 ./__TOOL_SUITE_SHORT_NAME__ --help
 ```
 
-## Build the required Conda environment
+## Build the required Conda runtime environment (if not using Singularity/Apptainer)
 
 __TOOL_SUITE_NAME__ pipelines use version-controlled 3rd-party software built into a 
 [conda](https://docs.conda.io/)
-environment. Build that environment in your __TOOL_SUITE_NAME__ installation as follows:
+environment. There are two ways to obtain or create that environment.
+
+### Use Singularity containers, i.e., Apptainers (recommended)
+
+__TOOL_SUITE_NAME__ supports Singularity containers that have the required
+conda environments pre-installed. No action is needed to support their use
+if either the `singularity` or `module load singularity` command is availalbe 
+on your server - the containers will download automatically and be used as needed.
+
+If you wish to use containers but need to run a different command
+to make `singularity` available, follow the instructions in
+`.../mdi/config/singularity.yml` to communicate that command to the MDI.
+
+### Build the Conda environments locally
+
+If you don't have Singularity or Apptainer available on your system,
+or prefer or need to build the Conda environments yourself, you can
+build them in your __TOOL_SUITE_NAME__ installation as follows:
 
 ```sh
 __TOOL_SUITE_SHORT_NAME__ analyze conda --create
 ```
 
-You must have `conda` available in your environment. If you need to run
+You must have `conda` available on your system. If you need to run
 a command to make conda available, follow the instructions in
 `.../mdi/config/stage1-pipelines.yml`, which is pre-configured to work on
 the University of Michigan Great Lakes cluster.
@@ -138,6 +157,13 @@ salloc --account <your_slurm_account> --cpus-per-task 4 --mem-per-cpu 4G
 __TOOL_SUITE_SHORT_NAME__ analyze conda --create
 exit
 ```
+
+### Communicate your environment choice using option `--runtime`
+
+Option `--runtime` defaults to value 'auto', which will prefer to use
+Singularity containers and fall back to local conda environments if that fails. 
+To force the use of a specific runtime environment, set the option to 
+either `--runtime singularity` or `--runtime conda`.
 
 ## Execute a pipeline from the command line
 

@@ -147,7 +147,7 @@ function set_singularity_version_ {
 }
 function set_singularity_version {
     set_singularity_version_ # use system singularity if present
-    if [ "$SINGULARITY_VERSION" = "" ]; then # otherwise attempt to load it
+    if [ "$SINGULARITY_VERSION" = "" ]; then # otherwise attempt to load it from config
         CONFIG_FILE=$MDI_DIR/config/singularity.yml
         if [ -f $CONFIG_FILE ]; then
             LOAD_COMMAND=`grep -P '^load-command:\s+' $CONFIG_FILE | sed -e 's/\"//g' -e 's/load-command:\s*//' | grep -v null | grep -v '~'`
@@ -157,6 +157,10 @@ function set_singularity_version {
             fi
         fi
     fi 
+    if [ "$SINGULARITY_VERSION" = "" ]; then # otherwise attempt to fall back to "module load singularity"
+        module load singularity > /dev/null 2>&1
+        set_singularity_version_
+    fi
 }
 
 #----------------------------------------------------------------------
@@ -173,8 +177,7 @@ foreach my $dir(glob("'$NESTED_SUITES_DIR'/*/shiny/apps/*")){
     print "TRUE\n";
     exit;
 }'`
-if [ "$SUITE_NAME" = "mdi-singularity-base" ]; then IS_BASE_INSTALL=true; fi
-if [[ "$IS_APPS" = "TRUE" || "$IS_BASE_INSTALL" != "" ]]; then 
+if [[ "$IS_APPS" = "TRUE" ]]; then 
     echo -e "\n----------------------------------------------------------------------"
     echo "'$SUITE_NAME' additionally offers interactive Stage 2 Apps"
     echo "----------------------------------------------------------------------"
@@ -183,14 +186,14 @@ if [[ "$IS_APPS" = "TRUE" || "$IS_BASE_INSTALL" != "" ]]; then
     set_singularity_version
     SUPPORTS_CONTAINERS=`grep -A10 -P '^container:' $SUITE_DIR/_config.yml | grep -P '^\s+supported:\s+true'`
     CONTAINER_HAS_APPS=`grep -A10 -P '^container:' $SUITE_DIR/_config.yml | grep -P '^\s+apps:\s+true'`
-    if [[ "$SINGULARITY_VERSION" != "" && "$SUPPORTS_CONTAINERS" != "" && "$CONTAINER_HAS_APPS" != "" && "$IS_BASE_INSTALL" = "" ]]; then
+    if [[ "$SINGULARITY_VERSION" != "" && "$SUPPORTS_CONTAINERS" != "" && "$CONTAINER_HAS_APPS" != "" ]]; then
         echo -e "\n'$SUITE_NAME' apps server runs in a suite-level Singularity container."
         echo -e "Further installation not required."
 
     # if not, proceed with direct apps server installation if confirmed
     else
         echo -e "\nNOTE: The apps server installation requires R and takes many minutes to complete."
-        echo -e "Please decline if you will only use Stage 1 data analysis pipelines from this installation.\n"
+        echo -e "Please decline if you will only use Stage 1 data analysis pipelines from this installation.\n";
         if [ "$MDI_SKIP_APPS" != "" ]; then
             PERMISSION=n
         elif [ "$MDI_FORCE_APPS" != "" ]; then

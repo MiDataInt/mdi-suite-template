@@ -13,13 +13,15 @@ aux_links:
 
 # OPTIONAL: declare support for suite-level singularity containers
 container:
-  supported:  false    # set to true if you maintain a container registry for this tool suite [false]
-  registry:   ghcr.io  # domain name of your OCI-compatible, oras-accessible, container registry [ghcr.io]
-  owner:      xxxxx    # REQUIRED: the name of the owner, e.g., user or organization, at 'registry'
-  installer:  apt-get  # the installer program used by the container OS, typically apt-get or yum [apt-get]
+  supported:  false    # set to true if you maintain a suite-level container registry for this repository
+  registry:   ghcr.io  # domain name of your OCI-compatible, oras-accessible, container registry
+  owner:      GIT_USER # REQUIRED: the name of the owner, e.g., user or organization, at 'registry'
+  installer:  apt-get  # the installer program used by the container OS, typically apt-get or yum
   stages:
-    pipelines: true    # set to true to install pipeline conda environments in the suite container [true]
-    apps:      false   # OBSOLETE: no longer used
+    pipelines: false   # set to true to install conda environments into a suite-level pipelines container
+    apps:      false   # set to true to install conda environments into a suite-level apps container
+                       # one of stages:pipelines or stages:apps must be true if container:supported is true
+                       # alternatively, support pipeline-level containers by the 'container' key in pipeline.yml
 
 #------------------------------------------------------------------------------
 # please do not edit any lines below this line
