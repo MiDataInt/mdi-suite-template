@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BINARY_NAME: __TOOL_SUITE_NAME__ # change this line to compile shared/crates/<BINARY_NAME>
-                                       # the parent MDI repository must hold this file in .github/workflows
+      BINARY_NAME: BINARY_NAME # change this line to compile shared/crates/<BINARY_NAME>
+                               # the parent MDI repository must hold this file in .github/workflows
     steps:
       # checkout this tool suite
       - uses: actions/checkout@v6

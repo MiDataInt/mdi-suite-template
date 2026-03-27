@@ -40,9 +40,9 @@ that will help you quickly develop pipelines and apps:
 - [MDI pipelines framework documentation](https://midataint.github.io/mdi-pipelines-framework)
 - [MDI apps framework documentation](https://midataint.github.io/mdi-apps-framework)
 
-### Finishing your main tool suite README.md
+### Finishing your tool suite README.md
 
-This file will become the README for your tool suite to edit as needed.
+This file becomes the README for your tool suite.
 Delete everything up to this section, then modify the sections below 
 to match your tool suite. 
 
@@ -50,7 +50,7 @@ Most tool suites are recommended to use a single-suite intallation.
 If a multi-suite installation is better for your application, or not 
 recommended at all, modify the different installation sections as needed.
 
-Instructions below are also written assuming you will support containers.
+Instructions below are written assuming you will support containers.
 Modify those sections below if you only support local conda environments.
 
 # __TOOL_SUITE_NAME__ Tool Suite
@@ -75,6 +75,9 @@ we recommend a single-suite installation, which is accomplished by:
 - running _install.sh_
 - optionally running _alias.pl_ to create an `__TOOL_SUITE_SHORT_NAME__` alias to the command line interface (CLI)
 
+See the bottom of this README for information on an alternative 
+container-only way of using of __TOOL_SUITE_NAME__ pipelines.
+
 ### Install this tool suite
 
 ```bash
@@ -83,10 +86,10 @@ cd __TOOL_SUITE_NAME__
 ./install.sh
 ```
 
-To start, answer 'y' (yes) to install the Stage 1 Pipelines, then after a
+Answer 'y' (yes) to install the Stage 1 Pipelines, then after a
 minute, answer 'n' (no) to skip installation of the Stage 2 Apps (for now).
 
-### Create an alias to the suite's command line interface (optional)
+### Create an alias to the command line interface (optional)
 
 ```bash
 # you can use a different alias if you'd like, e.g., replace __TOOL_SUITE_SHORT_NAME__ with __TOOL_SUITE_NAME__
@@ -126,7 +129,7 @@ runtime environment. There are two ways to obtain or create that environment.
 __TOOL_SUITE_NAME__ supports Singularity containers that have the required
 conda environments pre-installed. No action is needed to support their use
 if either the `singularity` or `module load singularity` command is available 
-on your server - the containers will download automatically and be used as needed.
+on your server - the containers will download and be used automatically.
 
 If you wish to use containers but need to run a different command
 to make `singularity` available, follow the instructions in
@@ -146,8 +149,7 @@ Note that internally conda environments are built using
 [micromamba](https://mamba.readthedocs.io/).
 
 In a shared server environment, the environment build command may get killed by the host.
-If that happens, run the command on a cluster worker node with sufficient resources,
-e.g., 4 CPU with 4G RAM per CPU works well.
+If that happens, run the command on a cluster worker node with sufficient resources, e.g.:
 
 ```sh
 # example for a Slurm-based cluster server
@@ -160,7 +162,7 @@ exit
 
 Option `--runtime` defaults to value 'auto', which will prefer to use
 Singularity containers and fall back to locally built environments only if 
-that fails. To force the use of a specific runtime environment, set the 
+that fails. To force the use of a specific environment, set the 
 option to either `--runtime singularity` or `--runtime conda`.
 
 ## Execute a pipeline from the command line
@@ -175,7 +177,7 @@ See [the templates folder](https://github.com/__GIT_OWNER__/__TOOL_SUITE_NAME__/
 for job file templates for all __TOOL_SUITE_NAME__ pipelines
 and actions, and <https://midataint.github.io/mdi/docs/job_config_files.html>
 for extended help on using job files. Job file templates can also be generated with 
-command `__TOOL_SUITE_SHORT_NAME__ <pipeline> template`, e.g., `__TOOL_SUITE_SHORT_NAME__ basecall template`.
+command `__TOOL_SUITE_SHORT_NAME__ <pipeline> template`, e.g., `__TOOL_SUITE_SHORT_NAME__ analyze template`.
 
 The __TOOL_SUITE_NAME__ CLI and job files can run pipeline actions either 
 inline in the calling shell or by submitting jobs to your server job scheduler.
@@ -194,13 +196,13 @@ __TOOL_SUITE_SHORT_NAME__ myJob.yml ls               # show the contents of a jo
 
 ### Workflow sequence
 
-__TOOL_SUITE_NAME__ has _pipelines_ each with associated _actions_ with descriptive names, 
+__TOOL_SUITE_NAME__ has _pipelines_ each with associated _actions_, 
 listed here in execution order of the most common actions:
 - `__PIPELINE__ __ACTION__` (where `__PIPELINE__` is a _pipeline_ and `__ACTION__` is an _action_)
 
 Required/common options are described below; use 
 `__TOOL_SUITE_SHORT_NAME__ <pipeline> <action> --help` or `__TOOL_SUITE_SHORT_NAME__ <pipeline> template` 
-for complete option information, or see the output of all action help commands
+for complete option information, or see the action help 
 [here](https://github.com/__GIT_OWNER__/__TOOL_SUITE_NAME__/tree/main/options).
 
 ### Universally required options
@@ -246,7 +248,8 @@ which allows you to control both local and remote MDI web servers.
 
 After following the instructions to run the Desktop on your local machine
 or server, load a __TOOL_SUITE_NAME__ data package file ending in `.mdi.package.zip`,
-into the app interface.
+into the app interface. If possible, the relevant container
+will automatically be downloaded and used to run the apps server.
 
 ## Alternative multi-suite installation
 
@@ -266,7 +269,7 @@ cd mdi
 ./install.sh
 ```
 
-To start, answer 'y' (yes) to install the Stage 1 Pipelines, then after a
+Answer 'y' (yes) to install the Stage 1 Pipelines, then after a
 minute, answer 'n' (no) to skip installation of the Stage 2 Apps (for now).
 
 ### Add an mdi alias to .bashrc (optional)
@@ -291,6 +294,56 @@ or `cd` into the directory prior to calling `./mdi`.
 ./mdi add --suite __GIT_OWNER__/__TOOL_SUITE_NAME__
 ```
 
-Later you can add as many additional tool suites
-to this same MDI installation as needed, which can reduce
-disk utilization for resource files and R libraries.
+Later you can add additional tool suites to this same MDI installation 
+as needed, which can reduce disk utilization for resource files and R libraries.
+
+## Alternative container-only method of using __TOOL_SUITE_NAME__ pipelines
+
+Some users may only be interested in using __TOOL_SUITE_NAME__ pipelines
+as a standalone program, e.g., if __TOOL_SUITE_NAME__ actions are to be
+incorporated into a pre-existing workflow managment system.
+__TOOL_SUITE_NAME__ pipeline containers support this installation-free usage.
+
+Importantly, running pipelines via a direct call to a container,
+rather than via the CLI installed on your server, disables
+all of the worflow/job manager helpers in favor of your 
+pre-exiting solution. All data processing tasks and configuration 
+remain exactly the same since the container has the same installation
+in it as described above.
+
+### Download the relevant container
+
+You do not need to clone or install this repository, simply download the relevant 
+container image from:
+- <https://github.com/__GIT_OWNER__/__TOOL_SUITE_NAME__/pkgs/container/__LOWER_CASE_TOOL_SUITE_NAME__> 
+
+e.g., using command:
+- `singularity pull oras://ghcr.io/__GIT_OWNER__/__LOWER_CASE_TOOL_SUITE_NAME__:v0.0`
+
+### Use the container with directory bind mounts and direct action calls
+
+As always, you must bind mount all relevant server paths to 
+the container so that running pipeline jobs have access to your files. The 
+recommended directory organization above makes this easy by requiring only one bind
+mount of the __TOOL_SUITE_NAME__ root directory (even that is unnecessary
+if you work from that directory as the current working directory is implicitly
+mounted).
+
+Then simply follow `singularity run <image>.sif` with  your pipeline, action, 
+and options as you would for any typical data analysis program, e.g.:
+
+```sh
+# every relevant directory option should be prefixed with a bind mount directory
+ROOT_DIR=/path/to/__TOOL_SUITE_NAME__
+singularity run \
+    --bind $ROOT_DIR \
+    <image>.sif \
+        <pipeline> <action> \
+            --tmp-dir        $ROOT_DIR/tmp \
+            --output-dir     $ROOT_DIR/output \
+            --data-name      my-data-name \
+            --option-name    123
+            # etc.
+```
+
+The job report log is printed to STDOUT for you to consume as needed in your workflow.
