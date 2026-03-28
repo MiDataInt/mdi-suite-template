@@ -1,5 +1,5 @@
 ---
-published: false # set to false to remove this tab from your suite's doc site
+published: false
 ---
 
 ## Pipeline action option summaries

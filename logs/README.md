@@ -1,5 +1,5 @@
 ---
-published: false # set to false to remove this tab from your suite's doc site
+published: false
 ---
 
 ## Job log reports
@@ -8,9 +8,9 @@ The `logs` folder carries text files containing the output
 of the following commands applied to example __TOOL_SUITE_NAME__ job files.
 
 ```sh
-hf3 myJob.yml status # show the state of all submitted jobs
-hf3 myJob.yml report # show a job log report
-hf3 myJob.yml ls     # show the contents of a job's output diretory
+mdi myJob.yml status # show the state of all submitted jobs
+mdi myJob.yml report # show a job log report
+mdi myJob.yml ls     # show the contents of a job's output diretory
 ```
 
 Log file names reflect the pipeline and action they
