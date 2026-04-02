@@ -80,14 +80,13 @@ container-only way of using of __TOOL_SUITE_NAME__ pipelines.
 
 ### Install this tool suite
 
+Run the following to install the tool suite and command line interface (CLI).
+
 ```bash
 git clone https://github.com/__GIT_OWNER__/__TOOL_SUITE_NAME__.git
 cd __TOOL_SUITE_NAME__
-./install.sh
+./install.sh 1 
 ```
-
-Answer 'y' (yes) to install the Stage 1 Pipelines, then after a
-minute, answer 'n' (no) to skip installation of the Stage 2 Apps (for now).
 
 ### Create an alias to the command line interface (optional)
 
@@ -263,14 +262,13 @@ In the multi-suite mode, you will:
 
 ### Install the MDI framework
 
+Run the following to install the MDI command line interface (CLI).
+
 ```bash
 git clone https://github.com/MiDataInt/mdi.git
 cd mdi
-./install.sh
+./install.sh 1
 ```
-
-Answer 'y' (yes) to install the Stage 1 Pipelines, then after a
-minute, answer 'n' (no) to skip installation of the Stage 2 Apps (for now).
 
 ### Add an mdi alias to .bashrc (optional)
 
