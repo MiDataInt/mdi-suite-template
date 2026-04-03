@@ -18,7 +18,7 @@ if [ "$1" = "1" ]; then
 fi
 
 #----------------------------------------------------------------------
-# base directory of this tool suite, after user cloned it from GitHub
+# root directory of this tool suite, after user cloned it from GitHub
 #----------------------------------------------------------------------
 export SUITE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 export SUITE_NAME=`basename $SUITE_DIR`
@@ -42,11 +42,11 @@ if [ "$IS_READLINK" != "" ]; then export MDI_DIR=`readlink -f $MDI_DIR` ; fi
 #----------------------------------------------------------------------
 # if mdi-centric, exit quietly with a helpful message and no action taken
 #----------------------------------------------------------------------
-if [ "$SUITE_MODE" = "$MDI_CENTRIC" ]; then
+if [[ "$SUITE_MODE" = "$MDI_CENTRIC" || -f "$MDI_DIR/suite_centric" ]]; then
     echo -e "\nNothing to do.\n"
     echo -e "This copy of '$SUITE_NAME' is part of an MDI installation in directory:\n    $MDI_DIR\n"
     echo -e "Use it by calling the 'mdi' command line utility in that directory (multi-suite installation)"
-    echo -e "or the 'run' script in the parent of that directory (single suite installation).\n"
+    echo -e "or the 'run' script in the parent of that directory (single-suite installation).\n"
     exit 1
 fi
 
@@ -71,6 +71,7 @@ if [ "$PERMISSION" != "y" ]; then exit; fi
 
 #----------------------------------------------------------------------
 # install/update the MDI nested within this suite's directory
+# record that is a suite-centric installation of $SUITE_NAME
 #----------------------------------------------------------------------
 if [ -d $MDI_DIR ]; then
     cd $MDI_DIR
@@ -80,16 +81,8 @@ else
     git clone https://github.com/MiDataInt/mdi.git
     cd $MDI_DIR
 fi
+echo "$SUITE_NAME" > suite_centric
 $MDI_DIR/install.sh 1
-
-#----------------------------------------------------------------------
-# when installing into a container, copy over any existing base library
-#----------------------------------------------------------------------
-if [ -e $SUITE_DIR/mdi-tmp-library ]; then
-    rm -rf $MDI_DIR/library/*
-    mv $SUITE_DIR/mdi-tmp-library/* $MDI_DIR/library
-    rm -rf $SUITE_DIR/mdi-tmp-library
-fi
 
 #----------------------------------------------------------------------
 # programmatically write the suite-centric MDI installation's 'config/suites.yml' file
@@ -131,8 +124,8 @@ $MDI_DIR/install.sh 1
 #----------------------------------------------------------------------
 echo "cleaning up this suite directory"
 cd $SUITE_DIR
-rm -fr docs .git pipelines shared shiny templates
-rm -f  aws-mdi.md .gitignore index.html .lintr overview.md
+rm -fr docs .git pipelines shared shiny templates logs options
+rm -f  aws-mdi.md .gitignore index.html .lintr overview.md rust.txt singularity.def
 
 #----------------------------------------------------------------------
 # when instructed, e.g., during container buiding in CI, never install apps
